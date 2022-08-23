@@ -56,4 +56,27 @@ router.post("/sms", (req, res) => {
     `);
 });
 
+router.get("/nameday", (req, res) => {
+  // Use Axios to make a GET request to the nameday API
+  axios
+    .get(`https://nameday.abalin.net/api/V1/today`)
+    // here `response` is the response we get from the nameday API,
+    // Not to be confused with `res`, which is the response for our own app.
+    .then((response) => {
+      // The response will have headers and a body. We get the body using `data`.
+      let names = response.data.nameday['hu'];
+      // Now we can use the response from the nameday API to build our own response.
+      res.send(
+        `
+        <Response>
+        <Message>Nameday(s) today in Hungary: ${names}.</Message>
+        </Response>
+        `
+      );
+    })
+    .catch((error) => {
+      console.log(error);
+    });  
+});
+
 module.exports = router;
